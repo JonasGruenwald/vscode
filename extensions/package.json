@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Dependencies shared by all extensions",
   "dependencies": {
-    "typescript": "3.0.1"
+    "typescript": "3.0.1",
+    "vscode-extension-telemetry": "0.0.18"
   },
   "scripts": {
     "postinstall": "node ./postinstall"
