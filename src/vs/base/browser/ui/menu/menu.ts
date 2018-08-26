@@ -245,7 +245,7 @@ class MenuActionItem extends BaseActionItem {
 
 		this.container = container;
 
-		this.$e = $('a.action-menu-item').appendTo(this.builder);
+		this.$e = $('a.action-menu-item').appendTo(this.element);
 		if (this._action.id === Separator.ID) {
 			// A separator is a presentation item
 			this.$e.attr({ role: 'presentation' });
@@ -342,11 +342,11 @@ class MenuActionItem extends BaseActionItem {
 
 	_updateEnabled(): void {
 		if (this.getAction().enabled) {
-			removeClass(this.builder, 'disabled');
+			removeClass(this.element, 'disabled');
 			this.$e.removeClass('disabled');
 			this.$e.attr({ tabindex: 0 });
 		} else {
-			addClass(this.builder, 'disabled');
+			addClass(this.element, 'disabled');
 			this.$e.addClass('disabled');
 			removeTabIndexAndUpdateFocus(this.$e.getHTMLElement());
 		}
@@ -390,7 +390,7 @@ class SubmenuActionItem extends MenuActionItem {
 		}, 250);
 
 		this.hideScheduler = new RunOnceScheduler(() => {
-			if ((!isAncestor(document.activeElement, this.builder) && this.parentData.submenu === this.mysubmenu)) {
+			if ((!isAncestor(document.activeElement, this.element) && this.parentData.submenu === this.mysubmenu)) {
 				this.parentData.parent.focus(false);
 				this.cleanupExistingSubmenu(true);
 			}
@@ -404,7 +404,7 @@ class SubmenuActionItem extends MenuActionItem {
 		this.$e.attr('aria-haspopup', 'true');
 		$('span.submenu-indicator').attr('aria-hidden', 'true').text('\u25B6').appendTo(this.$e);
 
-		$(this.builder).on(EventType.KEY_UP, (e) => {
+		$(this.element).on(EventType.KEY_UP, (e) => {
 			let event = new StandardKeyboardEvent(e as KeyboardEvent);
 			if (event.equals(KeyCode.RightArrow) || event.equals(KeyCode.Enter)) {
 				EventHelper.stop(e, true);
@@ -413,14 +413,14 @@ class SubmenuActionItem extends MenuActionItem {
 			}
 		});
 
-		$(this.builder).on(EventType.KEY_DOWN, (e) => {
+		$(this.element).on(EventType.KEY_DOWN, (e) => {
 			let event = new StandardKeyboardEvent(e as KeyboardEvent);
 			if (event.equals(KeyCode.RightArrow) || event.equals(KeyCode.Enter)) {
 				EventHelper.stop(e, true);
 			}
 		});
 
-		$(this.builder).on(EventType.MOUSE_OVER, (e) => {
+		$(this.element).on(EventType.MOUSE_OVER, (e) => {
 			if (!this.mouseOver) {
 				this.mouseOver = true;
 
@@ -428,12 +428,12 @@ class SubmenuActionItem extends MenuActionItem {
 			}
 		});
 
-		$(this.builder).on(EventType.MOUSE_LEAVE, (e) => {
+		$(this.element).on(EventType.MOUSE_LEAVE, (e) => {
 			this.mouseOver = false;
 		});
 
-		$(this.builder).on(EventType.FOCUS_OUT, (e) => {
-			if (!isAncestor(document.activeElement, this.builder)) {
+		$(this.element).on(EventType.FOCUS_OUT, (e) => {
+			if (!isAncestor(document.activeElement, this.element)) {
 				this.hideScheduler.schedule();
 			}
 		});
@@ -461,10 +461,10 @@ class SubmenuActionItem extends MenuActionItem {
 
 	private createSubmenu(selectFirstItem = true) {
 		if (!this.parentData.submenu) {
-			this.submenuContainer = $(this.builder).div({ class: 'monaco-submenu menubar-menu-items-holder context-view' });
+			this.submenuContainer = $(this.element).div({ class: 'monaco-submenu menubar-menu-items-holder context-view' });
 
 			$(this.submenuContainer).style({
-				'left': `${$(this.builder).getClientArea().width}px`
+				'left': `${$(this.element).getClientArea().width}px`
 			});
 
 			$(this.submenuContainer).on(EventType.KEY_UP, (e) => {
